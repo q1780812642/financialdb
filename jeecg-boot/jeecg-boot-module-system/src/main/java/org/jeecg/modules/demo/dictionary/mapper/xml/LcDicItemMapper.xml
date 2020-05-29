@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.demo.dictionary.mapper.LcDicItemMapper">
+
+    <resultMap id="LcDicItemMap" type="org.jeecg.modules.demo.dictionary.vo.LcDicItemDto">
+        <id property="id" column="id"></id>
+        <result property="itemCode" column="item_code"></result>
+        <result property="itemName" column="item_name"></result>
+        <result property="startDate" column="start_date"></result>
+        <result property="endDate" column="end_date"></result>
+        <result property="states" column="states"></result>
+        <result property="notes" column="notes"></result>
+        <result property="delFlag" column="del_flag"></result>
+        <result property="departId" column="depart_id"></result>
+        <result property="createBy" column="create_by"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="sysOrgCode" column="sys_org_code"></result>
+        <result property="updateBy" column="update_by"></result>
+        <result property="izEnable" column="iz_enable"></result>
+        <!--关联字段-->
+        <result property="departName" column="depart_name"></result>
+    </resultMap>
+
+    <select id="queryLastCode" resultType="java.lang.String">
+        select ifnull((select item_code from lc_dic_item order by create_time desc limit 1),'ITEM0001') as item_code
+    </select>
+
+    <select id="queryItem" parameterType="org.jeecg.modules.demo.dictionary.entity.LcDicItem" resultMap="LcDicItemMap">
+        select lc_dic_item.id,lc_dic_item.item_code,lc_dic_item.item_name,lc_dic_item.start_date,lc_dic_item.end_date,lc_dic_item.states,lc_dic_item.notes,lc_dic_item.del_flag,lc_dic_item.depart_id,lc_dic_item.create_by,lc_dic_item.update_time,lc_dic_item.create_time,lc_dic_item.sys_org_code,lc_dic_item.update_by,lc_dic_item.iz_enable,sys_depart.depart_name
+        from lc_dic_item
+        left join sys_depart on lc_dic_item.depart_id=sys_depart.id
+        where
+        lc_dic_item.del_flag='0'
+        <if test="itemCode != null and itemCode != ''">
+            and item_code like concat('%',#{itemCode},'%')
+        </if>
+        <if test="itemName != null and itemName != ''">
+            and item_name like concat('%',#{itemName},'%')
+        </if>
+        <if test="startDate != null">
+            and start_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and end_date &lt;= #{endDate}
+        </if>
+        <if test="departName != null and departName != ''">
+            and sys_depart.depart_name like concat('%',#{departName},'%')
+        </if>
+        order by create_time
+        limit #{pageNo},#{pageSize}
+    </select>
+
+
+    <select id="queryItemCount" parameterType="org.jeecg.modules.demo.dictionary.entity.LcDicItem" resultType="java.lang.Long">
+        select count(*)
+        from lc_dic_item
+        left join sys_depart on lc_dic_item.depart_id=sys_depart.id
+        where
+        lc_dic_item.del_flag='0'
+        <if test="itemCode != null and itemCode != ''">
+            and item_code like concat('%',#{itemCode},'%')
+        </if>
+        <if test="itemName != null and itemName != ''">
+            and item_name like concat('%',#{itemName},'%')
+        </if>
+        <if test="startDate != null">
+            and start_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and end_date &lt;= #{endDate}
+        </if>
+        <if test="departName != null and departName != ''">
+            and sys_depart.depart_name like concat('%',#{departName},'%')
+        </if>
+    </select>
+
+</mapper>

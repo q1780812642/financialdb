@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.demo.dictionary.mapper.LcDicBankCardMapper">
+
+	<update id="deleteByMainId" parameterType="java.lang.String">
+		UPDATE
+		lc_dic_bank_card
+		SET
+			del_flag='1'
+		WHERE
+			 company_id = #{mainId}
+	</update>
+	
+	<select id="selectByMainId" parameterType="java.lang.String" resultType="org.jeecg.modules.demo.dictionary.entity.LcDicBankCard">
+		SELECT * 
+		FROM  lc_dic_bank_card
+		WHERE
+			 company_id = #{mainId} 	</select>
+</mapper>

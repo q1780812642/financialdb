@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.demo.dictionary.mapper.LcDicCityMapper">
+
+	<update id="updateTreeNodeStatus" parameterType="java.lang.String">
+		update lc_dic_city set has_child = #{status} where id = #{id}
+	</update>
+
+	<delete id="deleteAll">
+		delete from lc_dic_city
+	</delete>
+	
+	<select id="queryParentCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select count(*) from lc_dic_city where parent_code=#{parentCode}
+	</select>
+</mapper>
